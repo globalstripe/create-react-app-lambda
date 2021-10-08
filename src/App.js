@@ -1,50 +1,37 @@
-import React, { Component } from "react"
-import logo from "./logo.svg"
-import "./App.css"
+    // src/App.js
 
-class LambdaDemo extends Component {
-  constructor(props) {
-    super(props)
-    this.state = { loading: false, msg: null }
-  }
+    import React, { Component } from 'react';
+    import Images from './components/images';
 
-  handleClick = api => e => {
-    e.preventDefault()
+    class App extends Component {
+``
 
-    this.setState({ loading: true })
-    fetch("/.netlify/functions/" + api)
-      .then(response => response.json())
-      .then(json => this.setState({ loading: false, msg: json.msg }))
-  }
+      state = {
+        images: []
+      }
 
-  render() {
-    const { loading, msg } = this.state
+      componentDidMount() {
+        fetch('https://verizon.skylark.ostmodern.co.uk/api/images/')
+        .then(res => res.json())
+        .then((data) => {
+          this.setState({ images: data })
+          console.log(data)
+        })
+        .catch(console.log)
+      }
 
-    return (
-      <p>
-        <button onClick={this.handleClick("hello")}>{loading ? "Loading..." : "Call Lambda"}</button>
-        <button onClick={this.handleClick("async-dadjoke")}>{loading ? "Loading..." : "Call Async Lambda"}</button>
-        <br />
-        <span>{msg}</span>
-      </p>
-    )
-  }
-}
+      render() {
+        return (  
+          <div className="card">
+            <div className="card-body">
+              <h5 className="card-title">Steve Jobs</h5>
+              <h6 className="card-subtitle mb-2 text-muted">steve@apple.com</h6>
+              <p className="card-text">Stay Hungry, Stay Foolish</p>
+            </div>
+            <Images images={this.state.images} />
+          </div>
+        );
+      }
+    }
 
-class App extends Component {
-  render() {
-    return (
-      <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <p>
-            Edit <code>src/App.js</code> and save to reload.
-          </p>
-          <LambdaDemo />
-        </header>
-      </div>
-    )
-  }
-}
-
-export default App
+    export default App;
